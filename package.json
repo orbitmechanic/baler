@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@openzeppelin/contracts": "^3.4.1",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
@@ -34,5 +35,23 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/orbitmechanic/baler.git"
+  },
+  "keywords": [
+    "ETHOnline",
+    "NFThack",
+    "ERC721",
+    "Moralis"
+  ],
+  "author": "Team Baler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/orbitmechanic/baler/issues"
+  },
+  "homepage": "https://github.com/orbitmechanic/baler#readme"
 }
