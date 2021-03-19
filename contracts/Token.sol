@@ -6,7 +6,12 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract Token is ERC721{
 
-    constructor() ERC721("balerTest","BLRt"){
+    event constructed();
+    event minted(address to, uint256 tokenId);
+    event URIupdated(uint256 tokenId, string uri);
+
+    constructor() ERC721("balerTest","BLRt"){ 
+        emit constructed();
     }
 
     function exists(uint tokenId) public view returns (bool) {
@@ -15,10 +20,12 @@ contract Token is ERC721{
 
     function mint(address to, uint tokenId, bytes memory _data) public {
         _safeMint(to, tokenId, _data);
+        emit minted(to, tokenId);
     }
 
     function setTokenURI(uint256 tokenId, string memory _tokenURI) public {
         _setTokenURI(tokenId, _tokenURI);
+        emit URIupdated(tokenId, _tokenURI);
     }
 
     function isApprovedOrOwner(address spender, uint256 tokenId) public view returns (bool) {
