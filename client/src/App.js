@@ -75,8 +75,8 @@ function App(props) {
       <>
         <BrowserRouter>
           <Switch>
-            <Route exact strict path="/" component={HomePage} />
-            <Route exact strict path="/Home" component={HomePage} />
+            <Route strict path="/" component={HomePage} />
+            <Route strict path="/Home" component={HomePage} />
           </Switch>
         </BrowserRouter>
       </>
