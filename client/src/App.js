@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
-import SimpleStorage from "./contracts/SimpleStorage.json";
-import HomePage from "./pages/HomePage.jsx";
+import Token from "./contracts/token.json";
+import Navigation from './components/NavBar.jsx';
 import getWeb3 from "./getWeb3";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App(props) {
-  const [storageValue, setStorageValue] = useState(undefined);
+  const [tokenValue, setTokenValue] = useState(undefined);
   const [web3, setWeb3] = useState(undefined);
   const [accounts, setAccounts] = useState(undefined);
   const [contract, setContract] = useState(undefined);
@@ -26,9 +26,9 @@ function App(props) {
 
         // Get the contract instance.
         const networkId = await web3.eth.net.getId();
-        const deployedNetwork = SimpleStorage.networks[networkId];
+        const deployedNetwork = Token.networks[networkId];
         const contract = new web3.eth.Contract(
-          SimpleStorage.abi,
+          Token.abi,
           deployedNetwork && deployedNetwork.address,
         );
 
@@ -60,7 +60,7 @@ function App(props) {
       const response = await contract.methods.get().call();
 
       // Update state with the result.
-      setStorageValue(response);
+      setTokenValue(response);
 
 } catch(error){
     if(typeof web3 !== 'undefined'
@@ -73,12 +73,20 @@ function App(props) {
   }, [web3, accounts, contract]);
     return (
       <>
-        <BrowserRouter>
-          <Switch>
-            <Route strict path="/" component={HomePage} />
-            <Route strict path="/Home" component={HomePage} />
-          </Switch>
-        </BrowserRouter>
+        <Navigation />
+        <div>
+          <h1>Good to Go!</h1>
+          <p>Your Truffle Box is installed and ready.</p>
+          <h2>Smart Contract Example</h2>
+          <p>
+            If your contracts compiled and migrated successfully, below will show
+            a stored value of 5 (by default).
+          </p>
+          <p>
+            Try changing the value stored on <strong>line 40</strong> of App.js.
+          </p>
+
+        </div>
       </>
     );
   }
