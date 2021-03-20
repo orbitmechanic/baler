@@ -171,7 +171,7 @@ async function setUserDataBackend(){
   // Chain connections
   async function connectContract() {
     window.web3 = await Moralis.Web3.enable();
-    window.contractInstance = new Web3.eth.Contract(window.abi, contractAddress);
+    window.contractInstance = new Web3('HTTP://127.0.0.1:7545');
   }
 
 
@@ -263,7 +263,7 @@ async function setUserDataBackend(){
          <Row>
          { likes && likesOpen ?
            <div>
-            {likes && likes.length == 0?
+            {likes && likes.length === 0?
 
                <p className='center'>You have to like something..!</p>
                :
