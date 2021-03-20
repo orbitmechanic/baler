@@ -44,20 +44,20 @@ const MinterSpace = (props) => {
   }
 
     return (
-      <div >
+      <div  style={{width:'100%'}}>
         <DragAndDrop handleDrop={handleDrop}>
           <Row className='justify-content-center'>
-            <Col className='col-6'>
+            <Col style={{width:'50%'}} className='justify-content-center'>
               <Image src={draganddrop} rounded alt="drag-logo"  />
               {!image?
                 <p>Insert an image here!</p>
                 :null}
             </Col>
 
-            <Col className='col-6 justify-content-center align-items-center'>
+            <Col className='justify-content-center align-items-center' style={{width:'50%'}}>
               <div>
-                <input placeholder={image && image.name?image.name:'name'} id="imageName" type="text" />
-                <input placeholder='Title' id="title" type="text" />
+                <input placeholder={image && image.name?image.name:'name'} id="imageName" type="text" /><br />
+                <input placeholder='Title' id="title" type="text" /><br />
                 <input placeholder='Copies' id="copies" type="number" /><br />
                 <input placeholder='Address beneficiary' id="beneficiary" type="text" />
               </div>
