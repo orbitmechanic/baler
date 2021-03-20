@@ -26,8 +26,8 @@ function App() {
   const [likes, setLikes] = useState(null);
   const [editMode, setEditMode] = useState(false);
   // Replace this upon deployment:
-  const [contractAddress]= useState("0x8db57d026e6068CA68249A743D2bAc9d35E4BedA");
-  const [contractInstance, setContractInstance]=useState(null);
+  const [contractAddress]= useState("0xdfBd62f5d8c946407f03068983103faAd9fE766D");
+  const [contractInstance]=useState(null);
   //DApp handlers
   const [nftSelected, setNftSelected] = useState(null);
   const [likesOpen, setLikesOpen] = useState(true);
@@ -58,7 +58,7 @@ function App() {
   }
 
   Moralis.Web3.onAccountsChanged(async function (accounts) {
-    alert('Account changed!')
+    alert('Account changed!');
     setUserData(null);
   });
 
@@ -121,16 +121,17 @@ function App() {
     }
 
   async function getLikes(user){
-      let query = new Moralis.Query("UserImage");
+      // let query = new Moralis.Query("UserImage");
       const relation = user.relation('likes')
-      let results = await relation.query().find();
+      const kwery = relation.query;
+      let results = await kwery().find();
       const pics = results.map(function (r) {
         return {
           url: r.attributes.img.url(),
           name: r.attributes.img.name(),
         };
       });
-      // console.log('likes is ',results)
+      console.log('likes is ',results)
       setLikes(pics);
       }
 
@@ -176,11 +177,8 @@ async function setUserDataBackend(){
   async function connectContract() {
     window.web3 = await Moralis.Web3.enable();
     const web3Provided = new Web3('HTTP://127.0.0.1:7545');
-    // window.contractInstance =
-    const instance = new web3Provided.eth.Contract(tokenABI, contractAddress);
-    setContractInstance(instance);
+    window.contractInstance = new web3Provided.eth.Contract(tokenABI, contractAddress);
   }
-
 
   return (
     <Container fluid className="App">
@@ -247,16 +245,16 @@ async function setUserDataBackend(){
       <Row className=' justify-content-center border' style={{background: 'lightgreen',}}>
       {/*Collection list and character sheet handler */}
         <h3>{galleryOwner} Collection </h3>
-        {gallery?<h3 style={{marginLeft:'5px'}}>> {gallery.length}</h3>:null}
+        {gallery?<h3 style={{marginLeft:'5px'}}> {gallery.length}</h3>:null}
       </Row>
       <Row>
         { gallery?
           <div className='container center' id='gallery'>
             {gallery.map(function(d){
               return(
-                <a onClick={()=>{setNftSelected(d)}}>
+                <div onClick={()=>{setNftSelected(d)}}>
                   <img src={d.url} alt={d.name} height="200" width="200" margin="5px"></img>
-                </a>
+                </div>
                 )
                 })}
           </div>
@@ -282,9 +280,9 @@ async function setUserDataBackend(){
              <div className='container center' id='gallery'>
                {likes.map(function(d){
                  return(
-                   <a onClick={()=>{setNftSelected(d)}}>
+                   <div onClick={()=>{setNftSelected(d)}}>
                      <img src={d.url} alt={d.name} height="200" width="200" margin="5px"></img>
-                   </a>
+                   </div>
                    )
                    })}
              </div>
@@ -308,11 +306,11 @@ async function setUserDataBackend(){
              userList.map((ad)=>{
                return(
                  <div>
-                 <a onClick={()=>{
+                 <div onClick={()=>{
                    getGallery(ad);
                  }}>
                    {ad.slice(0,6)}..
-                 </a><br />
+                 </div><br />
                  </div>
                )
              })
