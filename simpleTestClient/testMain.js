@@ -1,5 +1,5 @@
-Moralis.initialize("PUT_APPID"); // Application id from moralis.io
-Moralis.serverURL = "PUT_serverurl"; //Server url from moralis.io
+Moralis.initialize("fMksRBkQSMb869ayRKUMlh16Qv9E9rafw1HFhHnu"); // Application id from moralis.io
+Moralis.serverURL = "https://eegvh9whrggj.moralis.io:2053/server"; //Server url from moralis.io
 
 let moralisUser;
 let baleTestContractInstance;
@@ -27,7 +27,8 @@ async function login() {
         if (!user) {
             user = await Moralis.Web3.authenticate();        }        
 
-        console.log("user: " + user);
+        console.log("user: "); 
+        console.log(user);
         console.log("User logged in");  
         
     } catch (error) {
