@@ -36,27 +36,28 @@ const MinterSpace = (props) => {
             const currentUser = Moralis.User.current();
             const userAddress = currentUser.get('ethAddress');
             const savedImgURL = userImg.attributes.img._url;
-            window.contractInstance.methods.mint(userAddress , savedImgURL, [1,2])
-              .send({from: userAddress })
-              .then( () => {alert("Token Minted!")})
+            props.contractInstance.methods.mint(userAddress , savedImgURL, [1,2])
+              .send({from: userAddress, gas:2500000 })
+              .then(() => {alert("Token Minted!")})
+              //listen to the event, upload [to, tokenId, URI] into the object
           });
     }, (error) => {alert(error);})
   }
     return (
-      <div >
+      <div className='flex' style={{width:'100%'}}>
         <DragAndDrop handleDrop={handleDrop}>
           <Row className='justify-content-center'>
-            <Col className='col-6'>
+            <Col className='flex'>
               <Image src={draganddrop} rounded alt="drag-logo"  />
               {!image?
                 <p>Insert an image here!</p>
                 :null}
             </Col>
 
-            <Col className='col-6 justify-content-center align-items-center'>
+            <Col className='flex justify-content-center align-content-center'>
               <div>
-                <input placeholder={image && image.name?image.name:'name'} id="imageName" type="text" />
-                <input placeholder='Title' id="title" type="text" />
+                <input placeholder={image && image.name?image.name:'name'} id="imageName" type="text" /><br />
+                <input placeholder='Title' id="title" type="text" /><br />
                 <input placeholder='Copies' id="copies" type="number" /><br />
                 <input placeholder='Address beneficiary' id="beneficiary" type="text" />
               </div>
