@@ -23,9 +23,6 @@ const MinterSpace = (props) => {
   async function uploadImage(){
     const imageName = document.getElementById('imageName').value;
     const file = image;
-    console.log('Preloading:');
-    console.log(imageName);
-    console.log(file);
     const moralisFile = new Moralis.File(imageName, file);
     moralisFile.save().then(function() {
       setImage(null);
@@ -33,14 +30,13 @@ const MinterSpace = (props) => {
       userImg.set("userId", props.user.id);
       userImg.set("img", moralisFile);
       userImg.save().then(alert("Image uploaded!"));
+      // mint token
+      
       //update front
-      console.log('userImg:');
-      console.log(userImg);
+
     }, function(error) {
       alert('Place a name to the file.. with extension!');
     });
-    console.log('moralisFile:');
-    console.log(moralisFile);
   }
 
     return (

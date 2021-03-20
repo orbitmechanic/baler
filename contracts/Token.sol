@@ -4,7 +4,7 @@ pragma solidity >=0.6.0.0 <0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract Token is ERC721{
+contract Token is ERC721 {
 
     event constructed();
     event minted(address to, uint256 tokenId);
@@ -18,9 +18,11 @@ contract Token is ERC721{
         return _exists(tokenId);
     }
 
-    function mint(address to, uint tokenId, bytes memory _data) public {
-        _safeMint(to, tokenId, _data);
+    function mint(address to, bytes memory data) public returns (uint256){
+        uint256 tokenId = totalSupply();
+        _safeMint(to, tokenId, data);
         emit minted(to, tokenId);
+        return tokenId;
     }
 
     function setTokenURI(uint256 tokenId, string memory _tokenURI) public {
