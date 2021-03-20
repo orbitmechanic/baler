@@ -11,7 +11,7 @@ import Button from 'react-bootstrap/Button'
 import LogButton from './components/logButton';
 import MinterSpace from './components/minterSpace';
 import CharacterSheet from './components/characterSheet';
-
+import UserData from './components/userData';
 //Helpers
 
 // Extras
@@ -24,6 +24,7 @@ function App() {
   const [userData, setUserData] = useState(null);
   const [gallery, setGallery] = useState(null);
   const [likes, setLikes] = useState(null);
+  const [editMode, setEditMode] = useState(false);
   // Replace this upon deployment:
   const [contractAddress]= useState("0xf271dF427d16D3f7910A8b2311E7c2f4702aF8C4");
   //DApp handlers
@@ -46,7 +47,7 @@ function App() {
       fetchUserData(currentUser);
       getGallery(currentUser.attributes.ethAddress);
       getLikes(currentUser);
-      connectContract();
+      // connectContract();
 
     }
   } else {
@@ -76,6 +77,8 @@ function App() {
         const currentUser = Moralis.User.current();  // this will now be null
         setUser(currentUser);
         setUserData(null);
+        setGallery(null);
+        setLikes(null);
       });
     }
 
@@ -110,7 +113,7 @@ function App() {
         setGalleryOwner(username.username)
         setGallery(profile.pics)
       } else {
-        alert("No pics from: ",{address});
+        alert("No pics from: "+username.username);
       }
     }
 
@@ -137,7 +140,31 @@ function App() {
       setUserList(userAddresses);}
     }
 
-
+// Backend aggregators
+async function setUserDataBackend(){
+  //validate inputs!
+  const newUsername = document.getElementById('username').value
+  const newEmail = document.getElementById('email').value
+  let saveRequired = false;
+  if(newUsername !== userData.username && newUsername !== ''){
+    user.set("username",newUsername);
+    saveRequired=true;
+    alert("Username changed to: "+newUsername)
+  }else{
+    alert("Username has not changed")
+  }
+  if (newEmail !== userData.email && newEmail !== ''){
+    user.set("email",newEmail);
+    saveRequired=true;
+    alert("Email changed to: "+newEmail)
+  }else{
+    alert("Email has not changed")
+  }
+  if(saveRequired){
+    user.save();
+    fetchUserData(user);
+  }
+}
 
 //App handler functions
 
@@ -166,15 +193,26 @@ function App() {
         { userData?
             <div style={{marginLeft: '5px',marginRight: '5px'}}>
                 {userData.username}
-                <Button onClick={()=>{console.log('TODO')}}>Edit</Button>
+                <Button onClick={()=>{setEditMode(true)}}>Edit</Button>
             </div>
           :null}
 {/* this will be prompt for new users,(form) to create username, email, etc */}
         {user && !userData?
-          <Button onClick={()=>{console.log('TODO')}}>Set</Button>
+          <Button onClick={()=>{setEditMode(true)}}>Set</Button>
         :null}
       </Row>
-          {/*image handler */}
+      <Row className='justify-content-center'>
+        {editMode?
+          <div className='center'>
+          <UserData
+            userData={userData}
+            setUserDataBackend = {setUserDataBackend}
+            setEditMode={setEditMode}
+          />
+          </div>
+        :
+        null}
+      </Row>
       <Row
         className="flex justify-content-center border"
         style={{background: 'lightblue',}}
@@ -193,7 +231,7 @@ function App() {
                 :
                 "Minterspace"
               }
-              <MinterSpace  user={user} />
+{/*              <MinterSpace  user={user} />*/}
       </Row>
       <Row className=' justify-content-center border' style={{background: 'lightgreen',}}>
       {/*Collection list and character sheet handler */}
