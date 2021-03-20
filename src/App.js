@@ -6,7 +6,6 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import Image from 'react-bootstrap/Image';
-import Carousel from 'react-bootstrap/Carousel'
 //Components
 import LogButton from './components/logButton';
 import MinterSpace from './components/minterSpace';
