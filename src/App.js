@@ -85,7 +85,7 @@ function App() {
     <Container fluid className="App">
       <Row style={{ height: '70px', padding: '5px 0', }} className="justify-content-end">
       {/*Login/Logout, address, name, edit user data*/}
-        { userData?
+        { userData && userData.address?
           <div style={{marginRight: '5px'}}>
               {userData.address.slice(0,7)}..
           </div>
