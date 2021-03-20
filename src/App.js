@@ -14,14 +14,19 @@ import MinterSpace from './components/minterSpace';
 
 // Extras
 const Moralis = require('moralis');
+const Web3 = require('web3');
 
 function App() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
+  // Replace this upon deployment:
+  const [contractAddress]= useState("0xf271dF427d16D3f7910A8b2311E7c2f4702aF8C4");
 
-// Moralis confs
+  // Moralis confs. 
+  // Replace these per server:
   Moralis.initialize("GsvY24d7vRLDtU5ixRYK10Ry7GscQEJP8mDVzzY3");
   Moralis.serverURL = 'https://wvtjjsmhximj.moralis.io:2053/server'
+  
 
   //Moralis functions
   const currentUser = Moralis.User.current();
@@ -29,6 +34,7 @@ function App() {
     if(!user){
       setUser(currentUser);
       fetchUserData(currentUser);
+      connectContract();
     }
   } else {
     console.log('should explain protocol and ask for login');
@@ -41,15 +47,16 @@ function App() {
 
   async function login() {
     let userAuth;
-      try {
-          userAuth = await Moralis.Web3.authenticate();
-          setUser(userAuth);
-          fetchUserData(userAuth);
-          alert("User logged in")
-      } catch (error) {
-          console.log(error);
-      }
+    try {
+        userAuth = await Moralis.Web3.authenticate();
+        setUser(userAuth);
+        fetchUserData(userAuth);
+        alert("User logged in")
+    } catch (error) {
+        console.log(error);
     }
+  }
+  
   async function logout(){
       console.log('Login out');
       Moralis.User.logOut().then(() => {
@@ -59,7 +66,7 @@ function App() {
       });
     }
 
-//Backend queries
+  //Backend queries
   async function fetchUserData(currentUser){
     let usernameRetrieve = await currentUser.get('username')
     let emailRetrieve = await currentUser.get('email')
@@ -67,7 +74,11 @@ function App() {
     await setUserData({username:usernameRetrieve, email:emailRetrieve, address: ethAddress})
   }
 
-
+  // Chain connections
+  async function connectContract() {
+    window.web3 = await Moralis.Web3.enable();
+    window.contractInstance = new Web3.eth.Contract(window.abi, contractAddress);
+  }
 
 
   return (
