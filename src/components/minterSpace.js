@@ -6,7 +6,6 @@ import draganddrop from '../images/drag.png';
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
-
 const Moralis = require('moralis');
 
 const MinterSpace = (props) => {
@@ -24,20 +23,24 @@ const MinterSpace = (props) => {
     const imageName = document.getElementById('imageName').value;
     const file = image;
     const moralisFile = new Moralis.File(imageName, file);
-    moralisFile.save().then(function() {
-      setImage(null);
-      const userImg = new Moralis.Object("UserImage");
-      userImg.set("userId", props.user.id);
-      userImg.set("img", moralisFile);
-      userImg.save().then(alert("Image uploaded!"));
-      // mint token
-      
-      //update front
-
-    }, function(error) {
-      alert('Place a name to the file.. with extension!');
-    });
-  }
+    moralisFile.save()
+    .then(function() {
+        setImage(null);
+        const userImg = new Moralis.Object("UserImage");
+        userImg.set("userId", props.user.id);
+        userImg.set("img", moralisFile);
+        userImg.save()
+          .then(() => {
+            alert("Image uploaded!");
+            // mint token
+            const currentUser = Moralis.User.current();
+            const userAddress = currentUser.get('ethAddress');
+            const savedImgURL = userImg.attributes.img._url;
+            window.contractInstance.methods.mint(userAddress , savedImgURL, [1,2])
+              .send({from: userAddress })
+              .then( () => {alert("Token Minted!")})
+          });
+    }, (error) => {alert(error);})
 
     return (
       <div >
@@ -66,7 +69,9 @@ const MinterSpace = (props) => {
               }}>Cancel</Button>
           </Row>
         </DragAndDrop>
-  </div>
-)
+      </div>
+    )
+  } 
 }
+
 export default MinterSpace;
