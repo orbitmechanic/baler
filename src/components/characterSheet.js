@@ -63,7 +63,7 @@ const CharacterSheet = (props) => {
     return (
       <div className='center'>
       <Card style={{  background: "#282c34"}}>
-        <Card.Img variant="top" src={props.nftSelected.url} />
+        <Card.Img variant="top" src={props.nftSelected.url} style={{height:"450", width:"300"}} />
         <Card.Body>
           <Card.Title>name: {props.nftSelected.name}</Card.Title>
           <Card.Text>

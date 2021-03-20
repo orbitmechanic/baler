@@ -5,7 +5,8 @@ import './bootstrap.min.css';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
-
+import Image from 'react-bootstrap/Image';
+import Carousel from 'react-bootstrap/Carousel'
 //Components
 import LogButton from './components/logButton';
 import MinterSpace from './components/minterSpace';
@@ -13,8 +14,10 @@ import CharacterSheet from './components/characterSheet';
 import UserData from './components/userData';
 //Helpers
 // Extras
+import baler from './images/baler.png';
 const Moralis = require('moralis');
 const Web3 = require('web3');
+
 
 const tokenJsonABI = require('./contracts/Token.json');
 
@@ -26,11 +29,12 @@ function App() {
   const [likes, setLikes] = useState(null);
   const [editMode, setEditMode] = useState(false);
   // Replace this upon deployment:
-  const [contractAddress]= useState("0xdfBd62f5d8c946407f03068983103faAd9fE766D");
-  const [contractInstance]=useState(null);
+  const [contractAddress]= useState("0x8D25eB164C769fCf10666E3d7ada650328d59b16");
+  // const [contractInstance]=useState(null);
   //DApp handlers
   const [nftSelected, setNftSelected] = useState(null);
-  const [likesOpen, setLikesOpen] = useState(true);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [likesOpen, setLikesOpen] = useState(false);
   const [userList, setUserList] = useState(true);
   const [galleryOwner, setGalleryOwner] = useState(null);
 
@@ -121,10 +125,10 @@ function App() {
     }
 
   async function getLikes(user){
-      // let query = new Moralis.Query("UserImage");
+      let query = new Moralis.Query("UserImage"); //has to be!
       const relation = user.relation('likes')
-      const kwery = relation.query;
-      let results = await kwery().find();
+      // const kwery = relation.query;
+      let results = await relation.query().find();
       const pics = results.map(function (r) {
         return {
           url: r.attributes.img.url(),
@@ -217,16 +221,22 @@ async function setUserDataBackend(){
         :
         null}
       </Row>
+      {!user && !userData?
+      <div className='justify-content-center'>
+      <Image src={baler} rounded alt="drag-logo" style={{height:'100%', width:'45%'}}  />
+      </div>
+      :null}
       <Row
         className="flex justify-content-center border"
-        style={{background: 'lightblue',}}
-        onClick={()=>{setNftSelected(null)}}
+        style={{background: '#1167b1',}}
+        onClick={()=>{
+          setNftSelected(null)}}
               >
             {/*title minter*/}
                 <h2>Mint new NFT</h2>
       </Row>
                 {/*image handler */}
-          {user && userData?
+          {user && userData ?
             <Row className='flex border'>
 
             {nftSelected?
@@ -237,34 +247,37 @@ async function setUserDataBackend(){
                   :
                   <MinterSpace
                     user={user}
-                    contractInstance={contractInstance}
                   />
                 }
             </Row>
               :null}
-      <Row className=' justify-content-center border' style={{background: 'lightgreen',}}>
+      <Row className=' justify-content-center border btn' style={{background: '#187bcd',}} onClick={()=>{setGalleryOpen(!galleryOpen)}}>
       {/*Collection list and character sheet handler */}
         <h3>{galleryOwner} Collection </h3>
         {gallery?<h3 style={{marginLeft:'5px'}}> {gallery.length}</h3>:null}
       </Row>
       <Row>
-        { gallery?
-          <div className='container center' id='gallery'>
+        { gallery && galleryOpen?
+            <div>
             {gallery.map(function(d){
               return(
                 <div onClick={()=>{setNftSelected(d)}}>
-                  <img src={d.url} alt={d.name} height="200" width="200" margin="5px"></img>
-                </div>
-                )
-                })}
-          </div>
+                  <img
+                    height="200"
+                    width="200"
+                    src={d.url}
+                    alt={d.name}
+                  />
+                  </div>
+              )})}
+              </div>
           :
-          <p className='center'>You have no NFTs minted! Do your first!!</p>
+          <p className='center'>Mint something!</p>
         }
         </Row>
         <Row
           className=' justify-content-center border'
-          style={{background: 'grey',}}
+          style={{background: '#2a9df4',}}
           onClick={()=>{setLikesOpen(!likesOpen)}}
           >
          {/*Likes list ..*/}
@@ -294,7 +307,7 @@ async function setUserDataBackend(){
          </Row>
          <Row
            className=' justify-content-center border'
-           style={{background: 'coral',}}
+           style={{background: '#2a9df4',}}
            onClick={fetchUserList}
          >
          {/*Users list */}

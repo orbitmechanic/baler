@@ -13,8 +13,12 @@
   }
 }
 
+.border{
+  color: #d0efff;
+}
+
 .App {
-  background-color: #282c34;
+  background-color: #03254c;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
