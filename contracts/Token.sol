@@ -4,11 +4,10 @@ pragma solidity >=0.6.0.0 <0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract Token is ERC721{
+contract Token is ERC721 {
 
     event constructed();
-    event minted(address to, uint256 tokenId);
-    event URIupdated(uint256 tokenId, string uri);
+    event minted(address to, uint256 tokenId, string URI);
 
     constructor() ERC721("balerTest","BLRt"){ 
         emit constructed();
@@ -18,14 +17,12 @@ contract Token is ERC721{
         return _exists(tokenId);
     }
 
-    function mint(address to, uint tokenId, bytes memory _data) public {
-        _safeMint(to, tokenId, _data);
-        emit minted(to, tokenId);
-    }
-
-    function setTokenURI(uint256 tokenId, string memory _tokenURI) public {
+    function mint(address to, string memory _tokenURI, bytes memory data) public returns (uint256){
+        uint256 tokenId = totalSupply();
+        _safeMint(to, tokenId, data);
         _setTokenURI(tokenId, _tokenURI);
-        emit URIupdated(tokenId, _tokenURI);
+        emit minted(to, tokenId, _tokenURI);
+        return tokenId;
     }
 
     function isApprovedOrOwner(address spender, uint256 tokenId) public view returns (bool) {
