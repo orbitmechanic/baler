@@ -12,10 +12,11 @@ import MinterSpace from './components/minterSpace';
 import CharacterSheet from './components/characterSheet';
 import UserData from './components/userData';
 //Helpers
-
 // Extras
 const Moralis = require('moralis');
 const Web3 = require('web3');
+
+const tokenJsonABI = require('./contracts/Token.json');
 
 function App() {
   const [user, setUser] = useState(null);
@@ -25,12 +26,15 @@ function App() {
   const [likes, setLikes] = useState(null);
   const [editMode, setEditMode] = useState(false);
   // Replace this upon deployment:
-  const [contractAddress]= useState("0xf271dF427d16D3f7910A8b2311E7c2f4702aF8C4");
+  const [contractAddress]= useState("0x8db57d026e6068CA68249A743D2bAc9d35E4BedA");
+  const [contractInstance, setContractInstance]=useState(null);
   //DApp handlers
   const [nftSelected, setNftSelected] = useState(null);
   const [likesOpen, setLikesOpen] = useState(true);
   const [userList, setUserList] = useState(true);
   const [galleryOwner, setGalleryOwner] = useState(null);
+
+  const tokenABI = tokenJsonABI['abi'];
 
   // Moralis confs.
   // Replace these per server:
@@ -171,7 +175,10 @@ async function setUserDataBackend(){
   // Chain connections
   async function connectContract() {
     window.web3 = await Moralis.Web3.enable();
-    window.contractInstance = new Web3('HTTP://127.0.0.1:7545');
+    const web3Provided = new Web3('HTTP://127.0.0.1:7545');
+    // window.contractInstance =
+    const instance = new web3Provided.eth.Contract(tokenABI, contractAddress);
+    setContractInstance(instance);
   }
 
 
@@ -220,18 +227,23 @@ async function setUserDataBackend(){
             {/*title minter*/}
                 <h2>Mint new NFT</h2>
       </Row>
-      <Row className='flex border'>
                 {/*image handler */}
-          {nftSelected?
-                <CharacterSheet
-                  user={user}
-                  nftSelected={nftSelected}
-                />
-                :
-                <MinterSpace  user={user} />
-              }
-              {/*"Minterspace"*/}
-      </Row>
+          {user && userData?
+            <Row className='flex border'>
+
+            {nftSelected?
+                  <CharacterSheet
+                    user={user}
+                    nftSelected={nftSelected}
+                  />
+                  :
+                  <MinterSpace
+                    user={user}
+                    contractInstance={contractInstance}
+                  />
+                }
+            </Row>
+              :null}
       <Row className=' justify-content-center border' style={{background: 'lightgreen',}}>
       {/*Collection list and character sheet handler */}
         <h3>{galleryOwner} Collection </h3>
