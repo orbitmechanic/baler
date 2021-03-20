@@ -47,7 +47,7 @@ function App() {
       fetchUserData(currentUser);
       getGallery(currentUser.attributes.ethAddress);
       getLikes(currentUser);
-      // connectContract();
+      connectContract();
 
     }
   } else {
@@ -229,9 +229,9 @@ async function setUserDataBackend(){
                   nftSelected={nftSelected}
                 />
                 :
-                "Minterspace"
+                <MinterSpace  user={user} />
               }
-{/*              <MinterSpace  user={user} />*/}
+              {/*"Minterspace"*/}
       </Row>
       <Row className=' justify-content-center border' style={{background: 'lightgreen',}}>
       {/*Collection list and character sheet handler */}
