@@ -32,12 +32,19 @@ const MinterSpace = (props) => {
       const userImg = new Moralis.Object("UserImage");
       userImg.set("userId", props.user.id);
       userImg.set("img", moralisFile);
-      userImg.save().then(alert("Image uploaded!"));
+      userImg.save().then(console.log("Image uploaded!"));
       //update front
       console.log('userImg:');
       console.log(userImg);
+
+      let savedImgURL = userImg.attributes.img._url;
+      console.log("savedImgURL");
+      console.log(savedImgURL);
+
+      
+
     }, function(error) {
-      alert('Place a name to the file.. with extension!');
+      console.log('Place a name to the file.. with extension!');
     });
     console.log('moralisFile:');
     console.log(moralisFile);
