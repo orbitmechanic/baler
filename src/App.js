@@ -50,6 +50,7 @@ function App() {
     try {
         userAuth = await Moralis.Web3.authenticate();
         setUser(userAuth);
+        fetchUserData(userAuth);
         alert("User logged in")
     } catch (error) {
         console.log(error);
