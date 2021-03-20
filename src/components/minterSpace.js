@@ -41,7 +41,7 @@ const MinterSpace = (props) => {
               .then( () => {alert("Token Minted!")})
           });
     }, (error) => {alert(error);})
-
+  }
     return (
       <div >
         <DragAndDrop handleDrop={handleDrop}>
@@ -71,7 +71,6 @@ const MinterSpace = (props) => {
         </DragAndDrop>
       </div>
     )
-  } 
 }
 
 export default MinterSpace;
