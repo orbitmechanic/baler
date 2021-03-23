@@ -38,8 +38,8 @@ function App() {
 
   // Moralis confs.
   // Replace these per server:
-  Moralis.initialize("GsvY24d7vRLDtU5ixRYK10Ry7GscQEJP8mDVzzY3");
-  Moralis.serverURL = 'https://wvtjjsmhximj.moralis.io:2053/server'
+  Moralis.initialize("4yoDUAxGyqowVFe30WmarOZdTJJ65TKQ4eHJ173M");
+  Moralis.serverURL = 'https://sjewgapz6fhf.moralis.io:2053/server'
 
 
   //Moralis functions
@@ -58,7 +58,7 @@ function App() {
   }
 
   Moralis.Web3.onAccountsChanged(async function (accounts) {
-    alert('Account changed!');
+    console.log('Account changed!');
     setUserData(null);
   });
 

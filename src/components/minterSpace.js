@@ -39,9 +39,12 @@ const MinterSpace = (props) => {
             const currentUser = Moralis.User.current();
             const userAddress = currentUser.get('ethAddress');
             const savedImgURL = userImg.attributes.img._url;
+            console.log("window.contractInstance");
+            console.log(window.contractInstance);
             window.contractInstance.methods.mint(userAddress , savedImgURL, [1,2])
-              .send({from: userAddress, gas:25000000 })
+              .send({from: userAddress })
               .then(() => {alert("Token Minted!")})
+              //error(() => {alert("Minting error!")})
               //listen to the event, upload [to, tokenId, URI] into the object
           });
     }, (error) => {alert(error);})
