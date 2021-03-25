@@ -45,8 +45,6 @@ const CharacterSheet = (props) => {
       setLikes(data);
     }
 
-
-
     async function likeImage(){
       const userImg = await getImage();
       const userImgLikes = await userImg.get("likes");
